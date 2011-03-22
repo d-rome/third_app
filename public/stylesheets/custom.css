@@ -12,7 +12,7 @@ header {
 
 header img {
   padding: 1em;
-  background: #bbb;
+  background: #fff;
 }
 
 section {
@@ -29,7 +29,7 @@ section h1 {
 /* Links */
 
 a {
-  color: #09c;
+  color: #069;
   text-decoration: none;
 }
 
@@ -46,9 +46,12 @@ a:visited {
 
 nav {
   float: right;
-  backgroud: white;
+}
+
+nav {
+  background-color: white;
   padding: 0 0.7em;
-   white-space: nowrap;
+  white-space: nowrap;
 }
 
 nav ul {
@@ -75,6 +78,7 @@ nav ul li a:hover {
   text-decoration: underline;
 }
 
+
 /* Sign up button */
 
 a.signup_button {
@@ -97,5 +101,19 @@ a.signup_button {
   -webkit-border-radius: 10px;
   border-radius:         10px;
 }
+
+
+footer {
+  text-align: center;
+  margin-top: 10px;
+  width: 710px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer nav {
+  float: none;
+}
+
 
 
