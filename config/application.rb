@@ -38,5 +38,12 @@ module ThirdApp
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    
+    # Add this for Spork 
+    if Rails.env.test?
+      initializer :after => :initialize_dependency_mechanism do 
+        ActiveSupport::Dependencies.mechanism = :load
+      end
+    end
   end
 end

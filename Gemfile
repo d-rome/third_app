@@ -12,15 +12,11 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 group :development do
   gem 'rspec-rails'
 end
-
+  
 group :test do
-  gem 'rspec'
-  gem 'webrat'
-  gem 'autotest'
-  gem 'redgreen'
-  gem 'test-unit'
-  gem 'autotest-inotify'
+  gem 'watchr'
   gem 'spork'
-#  gem 'spork', :git => "git://github.com/chrismdp/spork.git"
+  gem 'webrat', '0.7.1'
 end
+
 
