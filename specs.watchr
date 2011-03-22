@@ -33,12 +33,15 @@ end
 # --------------------------------------------------
 # Watchr Rules
 # --------------------------------------------------
-watch('^spec/(.*)_spec\.rb')    { |m| run_spec_matching(m[1]) }
-watch('^app/(.*)\.rb')          { |m| run_spec_matching(m[1]) }
-watch('^app/(.*)\.haml')        { |m| run_spec_matching(m[1]) }
-watch('^lib/(.*)\.rb')          { |m| run_spec_matching(m[1]) }
-watch('^spec/spec_helper\.rb')  { run_all_specs }
-watch('^spec/support/.*\.rb')   { run_all_specs }
+watch('^spec/(.*)_spec\.rb')             { |m| run_spec_matching(m[1]) }
+watch('^spec/controllers/(.*)_spec\.rb') { |m| run_spec_matching(m[1]) }
+watch('^spec/requests/(.*)_spec\.rb')    { |m| run_spec_matching(m[1]) }
+watch('^config/routes.rb')               { |m| run_spec_matching(m[1]) }
+watch('^app/(.*)\.rb')                   { |m| run_spec_matching(m[1]) }
+watch('^app/(.*)\.haml')                 { |m| run_spec_matching(m[1]) }
+watch('^lib/(.*)\.rb')                   { |m| run_spec_matching(m[1]) }
+watch('^spec/spec_helper\.rb')           { run_all_specs }
+watch('^spec/support/.*\.rb')            { run_all_specs }
 
 # --------------------------------------------------
 # Signal Handling
