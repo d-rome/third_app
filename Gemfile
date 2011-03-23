@@ -13,5 +13,8 @@ group :test do
   gem 'watchr'
   gem 'spork'
   gem 'webrat', '0.7.1'
+  gem 'factory_girl_rails', :require => false
+  # I had to install FG 1.0.1 manually: $gem install factory_girl_rails
+  # In spec_helper, added to Spork.each_run do block: require 'factory_girl_rails'
 end
 

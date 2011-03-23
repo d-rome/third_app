@@ -19,6 +19,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 end
 
 Spork.each_run do
+  require 'factory_girl_rails'
   load "#{Rails.root}/config/routes.rb"
   Dir["#{Rails.root}/app/**/*.rb"].each { |f| load f }
 end

@@ -44,6 +44,7 @@ watch('^lib/(.*)\.rb')                   { |m| run_spec_matching(m[1]) }
 # My customs:
 watch('^spec/models/(.*)_spec\.rb')      { |m| run_spec_matching(m[1]) }
 watch('^spec/spec_helper\.rb')           { run_all_specs }
+watch('^spec/factories\.rb')           { run_all_specs }
 watch('^app/helpers/.*\.rb')             { run_all_specs }
 watch('^config/routes.rb')               { run_all_specs }
 
