@@ -3,6 +3,8 @@ require 'spec_helper'
 describe UsersController do
   render_views
 
+# at heroku : "Example User", :email => "example@purdue.edu", :password => "foobar", :password_confirmation => "foobar")
+
 
   describe "GET 'show'" do
     
@@ -42,8 +44,12 @@ describe UsersController do
     end
   end
 
+# =========================================================
+# Sign up page
+# =========================================================
 
   describe "GET 'new'" do
+  
     it "should be successful" do
       get :new
       response.should be_success
