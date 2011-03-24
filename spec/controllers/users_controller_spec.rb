@@ -43,6 +43,9 @@ describe UsersController do
                                             :href    => user_path(@user))
     end
   end
+  
+
+  
 
 # =========================================================
 # Sign up page
@@ -117,7 +120,11 @@ describe UsersController do
       end
     end
   end
-  
+
+# =========================================================
+# Settings page
+# =========================================================
+
   describe "GET 'edit' (user clicks Settings page)" do
     
     before(:each) do
@@ -203,6 +210,34 @@ describe UsersController do
       it "should sign the user in"
     
     end
+  end
+    
+# =========================================================
+# Authentication: who can see edit pages
+# =========================================================
+  
+  describe "authentication of edit/update actions" do
+    
+    before(:each) do
+      @fuser = Factory(:user)
+    end
+    
+    it "should deny access to 'edit'" do
+      get :edit, :id => @fuser
+      response.should redirect_to(signin_path)
+      flash[:notice].should =~ /sign in/i
+    end
+    
+    it "should deny access to 'update'" do
+      put :update, :id => @fuser, :user => {}
+      response.should redirect_to(signin_path)
+    end
+    
+    
+
+    
+    
+    
   end
 end  
   
