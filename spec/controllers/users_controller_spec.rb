@@ -90,9 +90,9 @@ describe UsersController do
     
     describe "success" do
       
-        before(:each) do
-        @attr = { :name => "New User", :email => "user@example.com",
-                  :password => "foobar", :password_confirmation => "foobar" }
+      before(:each) do
+      @attr = { :name => "New User",   :email => "user@example.com",
+                :password => "foobar", :password_confirmation => "foobar" }
       end
       
       it "should redirect to the user show page" do
@@ -117,7 +117,96 @@ describe UsersController do
       end
     end
   end
-end
+  
+  describe "GET 'edit' (user clicks Settings page)" do
+    
+    before(:each) do
+      @user = Factory(:user)
+      test_sign_in(@user)
+    end
+    
+    it "should be successful" do
+      get :edit, :id => @user
+      response.should be_success
+    end
+    
+    it "should have the right title" do
+      get :edit, :id => @user
+      response.should have_selector('title', :content => "Edit user")
+    end
+    
+    it "should have a link to change the Gravatar" do
+      get :edit, :id => @user
+      response.should have_selector('a', :href => 'http://gravatar.com/emails',
+                                         :content => "change")
+    end
+  end
+  
+  describe "PUT 'update' (user submits a change to profile)" do
+
+    before(:each) do
+      @fuser = Factory(:user)
+      test_sign_in(@fuser)
+    end
+
+    describe "failure" do
+
+      before(:each) do
+      @attr = { :name => "",     :email => "",
+                :password => "", :password_confirmation => "" }
+      end
+      
+      it "should render the 'edit' page" do
+        put :update, :id => @fuser, :user => @attr
+        response.should render_template('edit')
+      end
+      
+      it "should have the right title" do
+        put :update, :id => @fuser, :user => @attr
+        response.should have_selector('title', :content => "Edit user")
+      end
+
+    end
+  
+    describe "success" do
+
+      before(:each) do
+      @attr = { :name => "New Name",    :email => "newemail@example.com",
+                :password => "newpass", :password_confirmation => "newpass" }
+      end
+      
+      it "should change the user's attributes" do
+        put :update, :id => @fuser, :user => @attr
+        #                             ^ user from users_controller
+        user = assigns(:user)
+        #                ^ user from controllor
+        @fuser.reload
+        # ^ reload user from the database
+        @fuser.name.should      == user.name
+        @fuser.email.should     == user.email
+        # ^ user saved to database,  ^ submitted user attributes 
+        @fuser.encrypted_password.should == user.encrypted_password
+
+      end
+      
+      it "should have a flash message" do
+        put :update, :id => @fuser, :user => @attr
+        flash[:success].should =~ /updated/
+      end
+      
+      it "should render the 'profile' page"
+      
+      it "should have the right title"
+      
+      it "should not create a new user"
+      
+      it "should sign the user in"
+    
+    end
+  end
+end  
+  
+
 
 
 

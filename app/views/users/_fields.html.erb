@@ -1,0 +1,17 @@
+<%= render 'shared/error_messages' %>
+<div class="field">
+  <%= fpass.label :name %><br />
+  <%= fpass.text_field :name %>
+</div>
+<div class="field">
+  <%= fpass.label :email %><br />
+  <%= fpass.text_field :email %>
+</div>
+<div class="field">
+  <%= fpass.label :password %><br />
+  <%= fpass.password_field :password %>
+</div>
+<div class="field">
+  <%= fpass.label :password_confirmation, "Confirm password" %><br />
+  <%= fpass.password_field :password_confirmation %>
+</div>
