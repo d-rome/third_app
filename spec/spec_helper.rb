@@ -15,6 +15,10 @@ Spork.prefork do
     # Needed for Spork
     ActiveSupport::Dependencies.clear
   end
+  
+  def test_sign_in(user)
+    controller.sign_in(user)
+  end
 end
 
 Spork.each_run do
@@ -25,8 +29,8 @@ Spork.each_run do
   # Load the sessions_helper extension to the application_controller 
   # for each run to so Spork doesn't have to be reloaded after a change
   # to the sessions_helper
-  def test_sign_in(user)
-    controller.sign_in(user)
-  end
+#  def test_sign_in(user)
+#    controller.sign_in(user)
+#  end
 end
 
