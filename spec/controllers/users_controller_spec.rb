@@ -200,15 +200,6 @@ describe UsersController do
         put :update, :id => @fuser, :user => @attr
         flash[:success].should =~ /updated/
       end
-      
-      it "should render the 'profile' page"
-      
-      it "should have the right title"
-      
-      it "should not create a new user"
-      
-      it "should sign the user in"
-    
     end
   end
     
@@ -222,16 +213,36 @@ describe UsersController do
       @fuser = Factory(:user)
     end
     
-    it "should deny access to 'edit'" do
-      get :edit, :id => @fuser
-      response.should redirect_to(signin_path)
-      flash[:notice].should =~ /sign in/i
+    describe "for non-signed-in users" do
+      
+      it "should deny access to 'edit'" do
+        get :edit, :id => @fuser
+        response.should redirect_to(signin_path)
+        flash[:notice].should =~ /sign in/i
+      end
+      
+      it "should deny access to 'update'" do
+        put :update, :id => @fuser, :user => {}
+        response.should redirect_to(signin_path)
+      end
     end
     
-    it "should deny access to 'update'" do
-      put :update, :id => @fuser, :user => {}
-      response.should redirect_to(signin_path)
+    
+    
+    
+    
+    describe "for signed-in users" do
+      it "should allow access to 'edit'" do
+        get :edit, :id => @fuser
+        response.should have_selector('h1', /edit user/i)
+      end
+      
+      it "should allow access to 'update'" do
+        put :update, :id => @fuser, :user => {}
+        response.should be_success
+      end
     end
+
     
     
 

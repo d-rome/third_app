@@ -27,7 +27,24 @@ public
     end
 
     def deny_access
+      store_location
       redirect_to signin_path, :notice => "Please sign in to access this page."
+    end
+
+    def store_location
+                                     # v this is a html tag
+      session[:return_to] = request.fullpath
+      #  ^ method that stores the location the user is trying to get to
+    end
+    
+    def redirect_back_or(default)
+      redirect_to(session[:return_to] || default)
+      clear_return_to
+    end
+    
+    def clear_return_to
+      session[:return_to] = nil
+      # to clear the return_to location so the redirect_to goes to the inteded path  
     end
 
 
