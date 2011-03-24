@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
 
 # user = User.create!(:name => "Dan", :email => "dan@gmail.com", :password => "letmein", :password_confirmation => "letmein")
 
+
   public
 
     def has_password?(submitted_password)
