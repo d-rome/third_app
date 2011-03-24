@@ -108,7 +108,7 @@ describe UsersController do
       
       it "should have a welcome message" do
         post :create, :user => @attr
-        flash[:success].should =~ /welcome to sos/i
+        flash[:success].should =~ /welcome to/i
       end
       
     end

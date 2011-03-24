@@ -13,7 +13,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      redirect_to user_path(@user), :flash => {:success => "Welcome to SOS." }
+      redirect_to user_path(@user), :flash =>
+        {:success => "Welcome to MAPmeds, #{@user.name}" }
     else
       @title = "Sign up"
       render 'new'
