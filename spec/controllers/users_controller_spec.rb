@@ -227,28 +227,36 @@ describe UsersController do
       end
     end
     
-    
-    
-    
-    
     describe "for signed-in users" do
-      it "should allow access to 'edit'" do
-        get :edit, :id => @fuser
-        response.should have_selector('h1', /edit user/i)
+      
+      before(:each) do
+        wrong_user = Factory(:user, :email => "wronguser@example.net")
+        test_sign_in(wrong_user)
       end
       
-      it "should allow access to 'update'" do
-        put :update, :id => @fuser, :user => {}
-        response.should be_success
+      it "should require matching users for 'edit'" do
+        get :edit, :id => @fuser
+        response.should redirect_to(root_path)
       end
+      
+      it "should require matching users for 'update'" do
+        put :update, :id => @fuser, :user => {}
+        response.should redirect_to(root_path)
+      end
+
+
+
+#      it "should allow access to 'edit'" do
+#        get :edit, :id => @fuser
+#        response.should have_selector('h1', /edit user/i)
+#      end
+#      
+#      it "should allow access to 'update'" do
+#        put :update, :id => @fuser, :user => {}
+#        response.should be_success
+#      end
     end
 
-    
-    
-
-    
-    
-    
   end
 end  
   

@@ -36,7 +36,7 @@ end
 watch('^spec/(.*)_spec\.rb')             { |m| run_spec_matching(m[1]) }
 watch('^spec/controllers/(.*)_spec\.rb') { |m| run_spec_matching(m[1]) }
 watch('^spec/requests/(.*)_spec\.rb')    { |m| run_spec_matching(m[1]) }
-# watch('^app/(.*)\.rb')                   { |m| run_spec_matching(m[1]) }
+watch('^app/(.*)\.rb')                   { |m| run_spec_matching(m[1]) }
 watch('^app/(.*)\.haml')                 { |m| run_spec_matching(m[1]) }
 watch('^lib/(.*)\.rb')                   { |m| run_spec_matching(m[1]) }
 # watch('^spec/support/.*\.rb')            { run_all_specs }
@@ -46,7 +46,7 @@ watch('^spec/models/(.*)_spec\.rb')      { |m| run_spec_matching(m[1]) }
 watch('^spec/spec_helper\.rb')           { run_all_specs }
 watch('^spec/factories\.rb')             { run_all_specs }
 watch('^app/helpers/.*\.rb')             { run_all_specs }
-watch('^app/(.*)\.rb')                   { run_all_specs } # inefficient
+# watch('^app/(.*)\.rb')                   { run_all_specs } # inefficient
 watch('^config/routes.rb')               { run_all_specs }
 
 # --------------------------------------------------
