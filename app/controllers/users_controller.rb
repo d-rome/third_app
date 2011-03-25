@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   before_filter :correct_user, :only => [:edit, :update]
 
   def index
-    @users = User.all
+    @users = User.all.paginate(:page => params[:page])
+      # ^ plural, rails looks for this when will_paginate is called
     @title = "All users"
   end
 
