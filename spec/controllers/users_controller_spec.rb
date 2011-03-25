@@ -7,17 +7,18 @@ describe UsersController do
 
   describe "GET 'index'" do
   
-    describe "for non-signed-in users" do
+    describe "for users who are not signed in" do
       
       it "should deny access" do
+        @fuser = Factory(:user)
         get :index
         response.should redirect_to(signin_path)
 #        flash[:notice] => you 
       end
     end
+  
+    describe "for users who are" do
     
-    describe "for signed-in-users" do
-      
       before(:each) do
         @fuser = test_sign_in(Factory(:user))
         # ^ this line signs the user in AND returns the user object
@@ -28,32 +29,56 @@ describe UsersController do
           Factory(:user, :email => Factory.next(:email))
         end
       end
-      
-      it "should be successful" do
-        get :index
-        response.should be_success
-      end
-      
-      it "should have the right title" do
-        get :index
-        response.should have_selector('title', :content => "All users")
-      end
-      
-      it "should have an element for each user" do
-        get :index
-        User.all.paginate(:page => 1).each do |user|
-          response.should have_selector('li', :content => user.name)
+  
+      describe "signed in" do
+        
+        it "should be successful" do
+          get :index
+          response.should be_success
+        end
+        
+        it "should have the right title" do
+          get :index
+          response.should have_selector('title', :content => "All users")
+        end
+        
+        it "should have an element for each user" do
+          get :index
+          User.all.paginate(:page => 1).each do |user|
+            response.should have_selector('li', :content => user.name)
+          end
+        end
+        
+        it "should paginate users" do
+          get :index
+          response.should have_selector('div.pagination')
+          response.should have_selector('span.disabled', :content => "Previous")
+          response.should have_selector('a', :href => "/users?page=2",
+                                             :content => "2")
+          response.should have_selector('a', :href => "/users?page=2",
+                                             :content => "Next")
         end
       end
+
+      describe "not admins" do
       
-      it "should paginate users" do
-        get :index
-        response.should have_selector('div.pagination')
-        response.should have_selector('span.disabled', :content => "Previous")
-        response.should have_selector('a', :href => "/users?page=2",
-                                           :content => "2")
-        response.should have_selector('a', :href => "/users?page=2",
-                                           :content => "Next")
+        it "should not have delete other user links" do
+          other_user = User.all.second
+          get :index
+          response.should_not have_selector('a', :href => user_path(other_user),
+                                             :content => "delete")
+        end      
+      end
+      
+      describe "admins" do
+        
+        it "should have delete other user links" do
+          @fuser.toggle!(:admin)
+          other_user = User.all.second
+          get :index
+          response.should have_selector('a', :href => user_path(other_user),
+                                             :content => "delete")
+        end
       end
     end
   end
@@ -255,6 +280,62 @@ describe UsersController do
       end
     end
   end
+  
+# =========================================================
+# Admin user delete
+# =========================================================
+
+  describe "DELETE 'destroy'" do
+    
+    before(:each) do
+      @fuser = Factory(:user)
+    end
+    
+    describe "as a non-signed-in user" do
+      
+      it "should should deny access" do
+        delete :destroy, :id => @fuser
+        response.should redirect_to(signin_path)
+      end
+    end
+    
+    describe "as a non-admin user" do
+      it "should protect the action" do
+        test_sign_in(@fuser)
+        delete :destroy, :id => @fuser
+        response.should redirect_to(root_path)
+      end
+    end
+    
+    describe "as an admin user" do
+      
+      before(:each) do
+        @admin = Factory(:user, :email => "admin@example.com", :admin => true)
+        test_sign_in(@admin)
+      end
+    
+      it "should destroy the user" do
+        lambda do
+        delete :destroy, :id => @fuser
+        end.should change(User, :count).by(-1)
+      end
+      
+      it "should redirect to the users page" do
+        delete :destroy, :id => @fuser
+        flash[:success].should =~ /destroyed/i
+        response.should redirect_to(users_path)
+      end
+      
+      it "should not be able to destroy itself" do
+        lambda do
+          delete :destroy, :id => @admin
+        end.should_not change(User, :count)
+      end
+      
+    end
+    
+  end
+
     
 # =========================================================
 # Authentication: who can see edit pages
