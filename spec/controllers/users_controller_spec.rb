@@ -8,7 +8,6 @@ describe UsersController do
   describe "GET 'index'" do
   
     describe "for users who are not signed in" do
-      
       it "should deny access" do
         @fuser = Factory(:user)
         get :index
@@ -18,7 +17,6 @@ describe UsersController do
     end
   
     describe "for users who are" do
-    
       before(:each) do
         @fuser = test_sign_in(Factory(:user))
         # ^ this line signs the user in AND returns the user object
@@ -31,7 +29,6 @@ describe UsersController do
       end
   
       describe "signed in" do
-        
         it "should be successful" do
           get :index
           response.should be_success
@@ -61,7 +58,6 @@ describe UsersController do
       end
 
       describe "not admins" do
-      
         it "should not have delete other user links" do
           other_user = User.all.second
           get :index
@@ -71,7 +67,6 @@ describe UsersController do
       end
       
       describe "admins" do
-        
         it "should have delete other user links" do
           @fuser.toggle!(:admin)
           other_user = User.all.second
@@ -83,9 +78,11 @@ describe UsersController do
     end
   end
 
+# =========================================================
+# Showing a user profile
+# =========================================================
 
   describe "GET 'show'" do
-    
     before(:each) do
       @test_user = Factory(:user)
     end
@@ -153,19 +150,11 @@ describe UsersController do
 
 
 
-
-
-
-
-
-  
-
 # =========================================================
 # Sign up page
 # =========================================================
 
   describe "GET 'new'" do
-  
     it "should be successful" do
       get :new
       response.should be_success
@@ -178,9 +167,7 @@ describe UsersController do
   end
   
   describe "POST 'create'" do
-    
     describe "failure" do
-    
       before(:each) do
         @attr = { :name => "", :email => "", :password => "",
                   :password_confirmation => "" }
@@ -205,7 +192,6 @@ describe UsersController do
     end
     
     describe "success" do
-      
       before(:each) do
       @attr = { :name => "New User",   :email => "user@example.com",
                 :password => "foobar", :password_confirmation => "foobar" }
@@ -239,7 +225,6 @@ describe UsersController do
 # =========================================================
 
   describe "GET 'edit' (user clicks Settings page)" do
-    
     before(:each) do
       @user = Factory(:user)
       test_sign_in(@user)
@@ -263,14 +248,12 @@ describe UsersController do
   end
   
   describe "PUT 'update' (user submits a change to profile)" do
-
     before(:each) do
       @fuser = Factory(:user)
       test_sign_in(@fuser)
     end
 
     describe "failure" do
-
       before(:each) do
       @attr = { :name => "",     :email => "",
                 :password => "", :password_confirmation => "" }
@@ -285,11 +268,9 @@ describe UsersController do
         put :update, :id => @fuser, :user => @attr
         response.should have_selector('title', :content => "Edit user")
       end
-
     end
   
     describe "success" do
-
       before(:each) do
       @attr = { :name => "New Name",    :email => "newemail@example.com",
                 :password => "newpass", :password_confirmation => "newpass" }
@@ -306,7 +287,6 @@ describe UsersController do
         @fuser.email.should     == user.email
         # ^ user saved to database,  ^ submitted user attributes 
         @fuser.encrypted_password.should == user.encrypted_password
-
       end
       
       it "should have a flash message" do
@@ -321,13 +301,11 @@ describe UsersController do
 # =========================================================
 
   describe "DELETE 'destroy'" do
-    
     before(:each) do
       @fuser = Factory(:user)
     end
     
     describe "as a non-signed-in user" do
-      
       it "should should deny access" do
         delete :destroy, :id => @fuser
         response.should redirect_to(signin_path)
@@ -343,7 +321,6 @@ describe UsersController do
     end
     
     describe "as an admin user" do
-      
       before(:each) do
         @admin = Factory(:user, :email => "admin@example.com", :admin => true)
         test_sign_in(@admin)
@@ -366,9 +343,7 @@ describe UsersController do
           delete :destroy, :id => @admin
         end.should_not change(User, :count)
       end
-      
     end
-    
   end
 
     
@@ -377,13 +352,11 @@ describe UsersController do
 # =========================================================
   
   describe "authentication of edit/update actions" do
-    
     before(:each) do
       @fuser = Factory(:user)
     end
     
     describe "for non-signed-in users" do
-      
       it "should deny access to 'edit'" do
         get :edit, :id => @fuser
         response.should redirect_to(signin_path)
@@ -397,7 +370,6 @@ describe UsersController do
     end
     
     describe "for signed-in users" do
-      
       before(:each) do
         wrong_user = Factory(:user, :email => "wronguser@example.net")
         test_sign_in(wrong_user)
@@ -412,20 +384,7 @@ describe UsersController do
         put :update, :id => @fuser, :user => {}
         response.should redirect_to(root_path)
       end
-
-
-
-#      it "should allow access to 'edit'" do
-#        get :edit, :id => @fuser
-#        response.should have_selector('h1', /edit user/i)
-#      end
-#      
-#      it "should allow access to 'update'" do
-#        put :update, :id => @fuser, :user => {}
-#        response.should be_success
-#      end
     end
-
   end
 end  
   
