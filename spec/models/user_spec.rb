@@ -109,38 +109,38 @@ describe User do
 # =========================================================
     
     before(:each) do
-      @user = User.create!(@attr)
+      @test_user = User.create!(@attr)
     end
     
     it "should have an encrypted password attribute" do
-      @user.should respond_to(:encrypted_password)
+      @test_user.should respond_to(:encrypted_password)
     end
     
     it "should set the encrypted password attribute" do
-      @user.encrypted_password.should_not be_blank
+      @test_user.encrypted_password.should_not be_blank
     end
     it "should have a salt" do
-      @user.should respond_to(:salt)
+      @test_user.should respond_to(:salt)
     end
 
 
     describe "has_password? method" do
 
       it "should exist" do
-        @user.should respond_to(:has_password?)
+        @test_user.should respond_to(:has_password?)
       end
       
       it "should return true if the passwords match" do
-        @user.has_password?(@attr[:password]).should be_true
+        @test_user.has_password?(@attr[:password]).should be_true
       end
       
       it "should respond false if the passwords don't match" do
-        @user.has_password?("invalid").should be_false
+        @test_user.has_password?("invalid").should be_false
       end
     end  
 
 
-    describe "authenitcation method" do
+    describe "authentication method" do
 
       it "should respond with an object that exists" do
         User.should respond_to(:authenticate)
@@ -155,7 +155,7 @@ describe User do
       end
       
       it "should return the user object on a successful email/password match" do
-        User.authenticate(@attr[:email], @attr[:password]).should == @user
+        User.authenticate(@attr[:email], @attr[:password]).should == @test_user
       end
     end
   end
@@ -163,25 +163,53 @@ describe User do
   describe "admin attribute" do
   
     before(:each) do
-      @user = User.create!(@attr)
+      @test_user = User.create!(@attr)
       #        this bang ^ causes the create method to raise an exception if it fails
     end
     
     it "should respond to admin" do
-      @user.should respond_to(:admin)
+      @test_user.should respond_to(:admin)
     end
     
     it "should not be an admin by default" do
-      @user.should_not be_admin
+      @test_user.should_not be_admin
     end
     
     it "should be convertible to an admin" do
-      @user.toggle!(:admin)
+      @test_user.toggle!(:admin)
       #           ^ this bang toggles the boolean in the database
-      @user.should be_admin
+      @test_user.should be_admin
+    end
+  end
+  
+  describe "micropost associations" do
+    
+    before(:each) do
+      @test_user = User.create(@attr)
+      @ls1 = Factory(:list, :user => @test_user, :created_at => 1.day.ago)
+      @ls2 = Factory(:list, :user => @test_user, :created_at => 1.hour.ago)
+    end
+    
+    it "should have a lists attribute" do
+      @test_user.should respond_to(:lists)
+    end
+    
+    it "should have the right lists in the right order" do
+      @test_user.lists.should == [@ls2, @ls1]
+      
+    end
+    
+    it "should destroy associated lists" do
+      @test_user.destroy
+      [@ls1, @ls2].each do |list|
+        lambda do
+          List.find(list)
+        end.should raise_error(ActiveRecord::RecordNotFound)
+      end
     end
     
   end
+  
   
 end
 
