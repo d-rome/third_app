@@ -29,7 +29,6 @@ class User < ActiveRecord::Base
                        :confirmation => true,
                        :length       => { :within => 6..20 }
 
-
   before_save :encrypt_password
 
 # user = User.create!(:name => "Dan", :email => "dan@gmail.com", :password => "letmein", :password_confirmation => "letmein")

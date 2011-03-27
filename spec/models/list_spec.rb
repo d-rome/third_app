@@ -35,6 +35,49 @@ describe List do
       @list.user.should == @test_user
     end
   end
+  
+  describe "validations" do
+    
+    it "should have a user id" do
+      List.new(@attr).should_not be_valid
+    end
+    
+    it "should require a nonblank alias" do
+#      @test_user.lists.build(:alias => "   ").should_not be_valid
+      @test_user.lists.new(@attr.merge(:alias => "")).should_not be_valid
+    end
+
+    it "should require a nonblank unit" do
+      @test_user.lists.new(@attr.merge(:unit => "")).should_not be_valid
+    end
+
+    it "should require a nonblank participating manufacturer" do
+      @test_user.lists.new(@attr.merge(:participating_manufacturer => "")).should_not be_valid
+    end
+
+    it "should require a nonblank url" do
+      @test_user.lists.new(@attr.merge(:url => "")).should_not be_valid
+    end
+    
+    it "should reject long aliases" do
+      @test_user.lists.new(@attr.merge(:alias => "a" * 51)).should_not be_valid
+    end
+
+    it "should reject long units" do
+      @test_user.lists.new(@attr.merge(:unit => "a" * 21)).should_not be_valid
+    end
+    
+    it "should reject long participating manufactuerers" do
+      @test_user.lists.new(@attr.merge(:participating_manufacturer => "a" * 51)).should_not be_valid
+    end
+
+    it "should reject long urls" do
+      @test_user.lists.new(@attr.merge(:url => "a" * 201)).should_not be_valid
+    end
+
+
+  end
+  
 end
 
 

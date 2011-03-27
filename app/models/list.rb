@@ -23,16 +23,27 @@ class List < ActiveRecord::Base
   
   default_scope :order => 'lists.created_at DESC'
 
-composed_of :latest_price,
-  :class_name => "Money",
-  :mapping => [%w(latest_price_cents latest_price_cents), %w(latest_price_currency currency_as_string)],
-  :constructor => Proc.new {
-    |latest_price_cents, latest_price_currency| Money.new(latest_price_cents ||
-    0, latest_price_currency || Money.default_currency)
-  },
-  :converter => Proc.new {
-    |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError,
-    "Can't convert #{value.class} to Money")
-  }
+  composed_of :latest_price,
+    :class_name => "Money",
+    :mapping => [%w(latest_price_cents latest_price_cents), %w(latest_price_currency currency_as_string)],
+    :constructor => Proc.new {
+      |latest_price_cents, latest_price_currency| Money.new(latest_price_cents ||
+      0, latest_price_currency || Money.default_currency)
+    },
+    :converter => Proc.new {
+      |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError,
+      "Can't convert #{value.class} to Money")
+    }
+
+  validates :user_id,                    :presence => true
+  validates :alias,                      :presence => true,
+                                         :length   => { :maximum => 50 }
+  validates :unit,                       :presence => true,
+                                         :length   => { :maximum => 20 }
+  validates :participating_manufacturer, :presence => true,
+                                         :length   => { :maximum => 50 }
+  validates :url,                        :presence => true,
+                                         :length   => { :maximum => 200 }
+                                         
 
 end
