@@ -87,41 +87,76 @@ describe UsersController do
   describe "GET 'show'" do
     
     before(:each) do
-      @user = Factory(:user)
+      @test_user = Factory(:user)
     end
     
     it "should be successful" do
-      get :show, :id => @user
+      get :show, :id => @test_user
       response.should be_success
     end
     
     it "should find the right user" do
-      get :show, :id => @user
-      assigns(:user).should == @user
+      get :show, :id => @test_user
+      assigns(:user).should == @test_user
     end
     
     it "should have the right title" do
-      get :show, :id => @user
-      response.should have_selector('title', :content => @user.name)
+      get :show, :id => @test_user
+      response.should have_selector('title', :content => @test_user.name)
     end
     
     it "should have the user's name" do
-      get :show, :id => @user
-      response.should have_selector('h1', :content => @user.name)
+      get :show, :id => @test_user
+      response.should have_selector('h1', :content => @test_user.name)
     end
     
     it "should have a profile image" do
-      get :show, :id => @user
+      get :show, :id => @test_user
       response.should have_selector('h1>img', :class => "gravatar")
     end
     
     it "should have the right user URL in the body" do
-      get :show, :id => @user
-      response.should have_selector('td>a', :content => user_path(@user),
-                                            :href    => user_path(@user))
+      get :show, :id => @test_user
+      response.should have_selector('td>a', :content => user_path(@test_user),
+                                            :href    => user_path(@test_user))
+    end
+    
+    it "should show the user's lists" do
+      ls1 = Factory(:list, :user => @test_user, :alias => "Foobar")
+      ls2 = Factory(:list, :user => @test_user, :alias => "Baz quux")
+      get :show, :id => @test_user
+      response.should have_selector('span.alias', :content => ls1.alias)
+      # several alias meanings,    tag ^  ^css class ^ have_selector key ^ .alias => "Foobar"
+    end
+
+    it "should paginate lists" do
+      60.times { Factory(:list, :user => @test_user,
+      :alias => "Januvia 100mg", :unit => "tablet",
+      :participating_manufacturer => "Merck",
+      :url => "http://www.drugstore.com/januvia/100mg-tablets/qxn00006027731"
+      ) }
+      get :show, :id => @test_user
+      response.should have_selector('div.pagination')
+    end
+    
+    it "should display the list count" do
+      11.times { Factory(:list, :user => @test_user,
+      :alias => "Januvia 100mg", :unit => "tablet",
+      :participating_manufacturer => "Merck",
+      :url => "http://www.drugstore.com/januvia/100mg-tablets/qxn00006027731"
+      ) }
+      get :show, :id => @test_user
+      response.should have_selector('td.sidebar',
+                                    :content => @test_user.lists.count.to_s)
     end
   end
-  
+
+
+
+
+
+
+
 
   
 

@@ -13,9 +13,9 @@ Factory.define :list do |list|
   list.alias                      "Januvia 100mg"
   list.unit                       "tablet"
   list.participating_manufacturer "Merck"
-  list.quantity                   30
-  list.latest_price_cents         68882
-  list.latest_price_currency      "USD"
+#  list.quantity                   30
+#  list.latest_price_cents         68882
+#  list.latest_price_currency      "USD"
   list.url                        "http://www.drugstore.com/januvia/100mg-tablets/qxn00006027731"
   list.association :user
 end

@@ -41,9 +41,12 @@ describe List do
     it "should have a user id" do
       List.new(@attr).should_not be_valid
     end
-    
+
+    # Need to add quantity and price validations here, but delaying
+    # until I decide if I want to subtable those out.
+
+
     it "should require a nonblank alias" do
-#      @test_user.lists.build(:alias => "   ").should_not be_valid
       @test_user.lists.new(@attr.merge(:alias => "")).should_not be_valid
     end
 
