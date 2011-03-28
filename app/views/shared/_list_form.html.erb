@@ -1,0 +1,23 @@
+<%= form_for(@list) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="field">
+    <%= f.label :alias %><br />
+    <%= f.text_field :alias %>
+  </div>
+  <div class="field">
+    <%= f.label :unit %><br />
+    <%= f.text_field :unit %>
+  </div>
+  <div class="field">
+    <%= f.label :participating_manufacturer %><br />
+    <%= f.text_field :participating_manufacturer %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br />
+    <%= f.text_field :url %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Add Drug to List" %><br />
+  </div>
+<% end %>
+

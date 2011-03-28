@@ -1,8 +1,21 @@
-<h1>Third App</h1>
+<% if signed_in? %>
+  <table class="front" summary="For signed-in users">
+    <tr>
+      <td class="main">
+        <h1 class="list">Add a drug to track:</h1>
+        <%= render 'shared/list_form' %>
+      </td>
+    </tr>
+  </table>
+<% else %>
+
+<h1>MAPmeds</h1>
 <p>
 This is the home page for the MAPmeds drug price tracking application.<br /><br />
 With MAPmeds, you can define a list of medications to track, and the source to track.<br /><br />
-To get started using MAPmeds, click the signup button.
+To get started, click signup.
 </p>
 
 <%= link_to "Sign up", signup_path, :class => "signup_button roud" %>
+<% end %>
+

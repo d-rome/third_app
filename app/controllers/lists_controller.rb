@@ -5,22 +5,16 @@ class ListsController < ApplicationController
   public
 
     def create
-#      if
       @list = current_user.lists.build(params[:list])
-      @list.save
-#      # handle successful save
-#      else
+      if @list.save
+        redirect_to root_path, :flash => { :success => "List created." }
+      else
         render 'pages/home'
+      end
     end
 
     def destroy
       
-    end
-
-  private
-    
-    def authenticate
-      deny_access unless signed_in?
     end
 
 
